@@ -16,14 +16,24 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { color, size, price, quantity } = req.body;
-    const newDuckling = new Duckling({ color, size, price, quantity, isDeleted: false });
-    await newDuckling.save();
-    req.io.emit("itemUpdated");
-    res.status(201).json({
-      message: 'Duckling created!',
-      id: newDuckling._id,
-      newDuckling
-    });
+
+    const existingDuckling = await Duckling.findOne({ color, size, price });
+
+    if (existingDuckling) {
+      existingDuckling.quantity += quantity;
+      const updatedDuckling = await existingDuckling.save();
+      req.io.emit("itemUpdated");
+      return res.status(200).json(updatedDuckling);
+    } else {
+      const newDuckling = new Duckling({ color, size, price, quantity, isDeleted: false });
+      await newDuckling.save();
+      req.io.emit("itemUpdated");
+      res.status(201).json({
+        message: 'Duckling created!',
+        id: newDuckling._id,
+        newDuckling
+      });
+    }
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
