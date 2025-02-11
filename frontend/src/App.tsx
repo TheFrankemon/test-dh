@@ -1,33 +1,46 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { Duckling } from './models/Duckling';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [ducklings, setDucklings] = useState<Duckling[]>([{
+    id: '1',
+    color: 'Rojo',
+    size: 'XLarge',
+    price: 200,
+    quantity: 10000
+  }]);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Almacen de Patitos</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Color</th>
+            <th>Tamaño</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ducklings.map(item => (
+            <tr>
+              <td>{item.id}</td>
+              <td>{item.color}</td>
+              <td>{item.size}</td>
+              <td>{item.price}USD</td>
+              <td>{item.quantity}</td>
+              <td className='row-actions'>
+                <a>Editar</a>
+                <a>Borrar</a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </>
   )
 }
