@@ -1,7 +1,7 @@
-const ducklingColors = ['Rojo', 'Verde', 'Amarillo', 'Negro'] as const;
+export const ducklingColors = ['Rojo', 'Verde', 'Amarillo', 'Negro'] as const;
 type DucklingColor = typeof ducklingColors[number];
 
-const ducklingSizes = ['XLarge', 'Large', 'Medium', 'Small', 'XSmall'] as const;
+export const ducklingSizes = ['XLarge', 'Large', 'Medium', 'Small', 'XSmall'] as const;
 type DucklingSize = typeof ducklingSizes[number];
 
 export type Duckling = {
