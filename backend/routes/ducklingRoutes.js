@@ -5,7 +5,7 @@ const router = express.Router();
 // curl -X GET http://localhost:5001/api/ducklings
 router.get('/', async (req, res) => {
   try {
-    const ducklings = await Duckling.find().sort({ quantity: -1 });
+    const ducklings = (await Duckling.find().sort({ quantity: -1 })).filter(el => !el.isDeleted);
     res.json(ducklings);
   } catch (err) {
     res.status(500).json({ message: err.message });

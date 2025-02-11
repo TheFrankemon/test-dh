@@ -50,7 +50,9 @@ function App() {
   };
 
   const deleteDuckling = async (id: string) => {
-    await axios.put(`${apiEndpoint}/delete${id}`);
+    if (confirm('¿Estás seguro de borrar este registro?')) {
+      await axios.put(`${apiEndpoint}/delete/${id}`);
+    }
   };
 
   return (
