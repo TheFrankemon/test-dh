@@ -5,7 +5,7 @@ const ducklingSizes = ['XLarge', 'Large', 'Medium', 'Small', 'XSmall'] as const;
 type DucklingSize = typeof ducklingSizes[number];
 
 export type Duckling = {
-  id: string;
+  _id?: string;
   color: DucklingColor;
   size: DucklingSize;
   price: number;
