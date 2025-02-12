@@ -1,6 +1,7 @@
 const express = require('express');
-const Duckling = require('../models/Duckling');
 const router = express.Router();
+const Duckling = require('../models/Duckling');
+const { getPackagingType, getShippingPrice } = require('../helpers/ducklingOrderHelper');
 
 // curl -X GET http://localhost:5001/api/ducklings
 router.get('/', async (req, res) => {
@@ -86,6 +87,32 @@ router.put('/delete/:id', async (req, res) => {
     res.status(200).json(updatedDuckling);
   } catch (err) {
     res.status(400).json({ message: err.message });
+  }
+});
+
+// curl -X GET http://localhost:4000/api/ducklings/ducklingOrder -H "Content-Type: application/json" -d '{ "duckling": {"color": "Rojo", "size": "Medium", "price": 50, "quantity": 2 }, "destination": "India", "shippingMethod": "land" }'
+router.get('/ducklingOrder', async (req, res) => {
+  try {
+    const { duckling, destination, shippingMethod } = req.body;
+    const { size, price, quantity } = duckling;
+
+    const { packageMaterial, packageFilling } = getPackagingType(size, shippingMethod);
+    const { subtotal, additionalCosts, discounts } = getShippingPrice(destination, shippingMethod, quantity, price, packageMaterial);
+
+    const orderPrice = subtotal + additionalCosts - discounts;
+    const order = {
+      packageMaterial,
+      packageFilling,
+      orderPrice,
+      otherAmounts: {
+        additionalCosts,
+        discounts
+      }
+    };
+
+    res.status(200).json(order);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 
