@@ -1,16 +1,32 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { apiEndpoint, defaultDuckling } from '../constants/constants';
 import { Duckling, ducklingColors, ducklingSizes } from '../models/Duckling';
 
-function NewDucklingForm() {
+interface NewDucklingFormProps {
+  editDuckling?: Duckling;
+}
+
+function NewDucklingForm({editDuckling}: NewDucklingFormProps) {
   const [newDuckling, setNewDuckling] = useState<Duckling>(defaultDuckling);
+  const [isEdit, setIsEdit] = useState(!!editDuckling);
 
   const addDuckling = async () => {
-    await axios.post(`${apiEndpoint}`, newDuckling);
+    if (editDuckling) {
+      await axios.put(`${apiEndpoint}/${editDuckling._id}`, newDuckling);
+    } else {
+      await axios.post(`${apiEndpoint}`, newDuckling);
+    }
     setNewDuckling(defaultDuckling);
-    // setNewDucklingForm(false);
+    setIsEdit(false);
   };
+
+  useEffect(() => {
+    if (editDuckling) {
+      setNewDuckling(editDuckling);
+      setIsEdit(true);
+    }
+  }, [editDuckling]);
 
   return (
     <div className="new-duckling-form">
@@ -18,6 +34,7 @@ function NewDucklingForm() {
         <label>Color</label>
         <select
           value={newDuckling?.color}
+          disabled={isEdit}
           onChange={(e) => setNewDuckling(prev => ({ ...prev, color: e.target.value } as Duckling))}
         >
           <option value="">Selecciona un color</option>
@@ -30,6 +47,7 @@ function NewDucklingForm() {
         <label>Tamaño</label>
         <select
           value={newDuckling?.size}
+          disabled={isEdit}
           onChange={(e) => setNewDuckling(prev => ({ ...prev, size: e.target.value } as Duckling))}
         >
           <option value="">Selecciona un tamaño</option>
@@ -56,7 +74,7 @@ function NewDucklingForm() {
           placeholder="Precio" 
         />
       </div>
-      <button onClick={addDuckling}>Añadir</button>
+      <button onClick={addDuckling}>{isEdit ? 'Actualizar' : 'Añadir'}</button>
     </div>
   );
 }

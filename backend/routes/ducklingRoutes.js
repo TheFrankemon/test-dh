@@ -13,6 +13,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// curl -X GET http://localhost:4000/api/ducklings/67aa60c649f30f946dda8c28
+router.get('/:id', async (req, res) => {
+  try {
+    const duckling = await Duckling.findById(req.params.id);
+    res.status(200).json(duckling);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // curl -X POST http://localhost:5001/api/ducklings -H "Content-Type: application/json" -d '{"color": "red", "size": "small", "price": 30, "quantity": 2 }'
 router.post('/', async (req, res) => {
   try {

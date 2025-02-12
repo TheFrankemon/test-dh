@@ -16,6 +16,7 @@ function App() {
     quantity: 10000
   }]);
   const [newDucklingForm, setNewDucklingForm] = useState<boolean>(false);
+  const [editDucklingData, setEditDucklingData] = useState<Duckling>();
 
   useEffect(() => {
     fetchItems();
@@ -33,8 +34,15 @@ function App() {
   };
 
   const toggleNewDucklingForm = () => {
+    setEditDucklingData(undefined);
     setNewDucklingForm(!newDucklingForm);
   };
+
+  const editDuckling = async (id: string) => {
+    const { data } = await axios.get(`${apiEndpoint}/${id}`);
+    setEditDucklingData(data);
+    setNewDucklingForm(true);
+  }
 
   const deleteDuckling = async (id: string) => {
     if (confirm('¿Estás seguro de borrar este registro?')) {
@@ -46,13 +54,7 @@ function App() {
     <>
       <h1>Almacen de Patitos</h1>
       <button className='add-duck-button' onClick={toggleNewDucklingForm}>Agregar patito</button>
-      {
-        newDucklingForm ? (
-          <NewDucklingForm/>
-        ) : (
-          <></>
-        )
-      }
+      {newDucklingForm && <NewDucklingForm editDuckling={editDucklingData}/>}
       <table>
         <thead>
           <tr className='table-header'>
@@ -73,7 +75,7 @@ function App() {
               <td>{item.price}USD</td>
               <td>{item.quantity}</td>
               <td className='row-actions'>
-                <a>Editar</a>
+                <a onClick={() => editDuckling(item._id!)}>Editar</a>
                 <a onClick={() => deleteDuckling(item._id || '')}>Borrar</a>
               </td>
             </tr>
