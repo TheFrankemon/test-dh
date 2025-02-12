@@ -1,5 +1,7 @@
 # Duckling Store
 
+<img src="https://github.com/user-attachments/assets/2be4d626-0400-4d00-821a-4b0bfd4f2619" width="500">
+
 This project is a monorepo composed by a MongoDB-based backend and a React frontend.
 
 ### Prerequisites
