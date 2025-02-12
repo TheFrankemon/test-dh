@@ -45,7 +45,7 @@ function App() {
   return (
     <>
       <h1>Almacen de Patitos</h1>
-      <button onClick={toggleNewDucklingForm}>Agregar patito</button>
+      <button className='add-duck-button' onClick={toggleNewDucklingForm}>Agregar patito</button>
       {
         newDucklingForm ? (
           <NewDucklingForm/>
@@ -55,7 +55,7 @@ function App() {
       }
       <table>
         <thead>
-          <tr>
+          <tr className='table-header'>
             <th>Id</th>
             <th>Color</th>
             <th>Tamaño</th>

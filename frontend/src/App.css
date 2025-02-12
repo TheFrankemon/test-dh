@@ -6,22 +6,19 @@
   align-items: center;
 }
 
-table {
-  border: 1px solid white;
-}
-
 th {
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid #454545;
+  color: #767676;
+  text-align: left;
 }
 
 th, td {
   min-width: 100px;
-  padding: 15px;
+  padding: 16px;
 }
 
-th:not(:last-child),
-td:not(:last-child) {
-  border-right: 1px solid white;
+.add-duck-button {
+  margin-bottom: 10px;
 }
 
 .new-duckling-form {
