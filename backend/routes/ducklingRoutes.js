@@ -3,7 +3,7 @@ const router = express.Router();
 const Duckling = require('../models/Duckling');
 const { getPackagingType, getShippingPrice } = require('../helpers/ducklingOrderHelper');
 
-// curl -X GET http://localhost:5001/api/ducklings
+// curl -X GET http://localhost:4000/api/ducklings
 router.get('/', async (req, res) => {
   try {
     const ducklings = (await Duckling.find().sort({ quantity: -1 })).filter(el => !el.isDeleted);
@@ -23,7 +23,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// curl -X POST http://localhost:5001/api/ducklings -H "Content-Type: application/json" -d '{"color": "red", "size": "small", "price": 30, "quantity": 2 }'
+// curl -X POST http://localhost:4000/api/ducklings -H "Content-Type: application/json" -d '{"color": "red", "size": "small", "price": 30, "quantity": 2 }'
 router.post('/', async (req, res) => {
   try {
     const { color, size, price, quantity } = req.body;
@@ -50,7 +50,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// curl -X PUT http://localhost:5001/api/ducklings/67aa60c649f30f946dda8c28 -H "Content-Type: application/json" -d '{"color": "blue", "size": "medium", "price": 50, "quantity": 2 }'
+// curl -X PUT http://localhost:4000/api/ducklings/67aa60c649f30f946dda8c28 -H "Content-Type: application/json" -d '{"color": "blue", "size": "medium", "price": 50, "quantity": 2 }'
 router.put('/:id', async (req, res) => {
   try {
     const updatedDuckling = await Duckling.findByIdAndUpdate(
@@ -66,7 +66,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// curl -X DELETE http://localhost:5001/api/ducklings/67aa60c649f30f946dda8c28
+// curl -X DELETE http://localhost:4000/api/ducklings/67aa60c649f30f946dda8c28
 router.delete('/:id', async (req, res) => {
   try {
     const deletedDuckling = await Duckling.findByIdAndDelete(req.params.id);
@@ -79,7 +79,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 // soft delete
-// curl -X PUT http://localhost:5001/api/ducklings/delete/67aa60c649f30f946dda8c28
+// curl -X PUT http://localhost:4000/api/ducklings/delete/67aa60c649f30f946dda8c28
 router.put('/delete/:id', async (req, res) => {
   try {
     const duckling = await Duckling.findById(req.params.id);
