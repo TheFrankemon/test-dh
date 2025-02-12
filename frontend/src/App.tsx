@@ -2,17 +2,11 @@ import { useEffect, useState } from 'react'
 import axios from 'axios';
 import { io } from 'socket.io-client';
 import './App.css'
-import { Duckling, ducklingColors, ducklingSizes } from './models/Duckling';
+import { Duckling } from './models/Duckling';
+import NewDucklingForm from './components/newDucklingForm';
+import { apiEndpoint } from './constants/constants';
 
 const socket = io("http://localhost:4000");
-const apiEndpoint = 'http://localhost:4000/api/ducklings';
-
-const defaultDuckling: Duckling = {
-  color: 'Rojo',
-  size: 'XLarge',
-  price: 0,
-  quantity: 0
-};
 
 function App() {
   const [ducklings, setDucklings] = useState<Duckling[]>([{
@@ -21,7 +15,6 @@ function App() {
     price: 200,
     quantity: 10000
   }]);
-  const [newDuckling, setNewDuckling] = useState<Duckling>(defaultDuckling);
   const [newDucklingForm, setNewDucklingForm] = useState<boolean>(false);
 
   useEffect(() => {
@@ -37,12 +30,6 @@ function App() {
   const fetchItems = async () => {
     const { data } = await axios.get(`${apiEndpoint}`);
     setDucklings(data);
-  };
-
-  const addDuckling = async () => {
-    await axios.post(`${apiEndpoint}`, newDuckling);
-    setNewDuckling(defaultDuckling);
-    setNewDucklingForm(false);
   };
 
   const toggleNewDucklingForm = () => {
@@ -61,51 +48,7 @@ function App() {
       <button onClick={toggleNewDucklingForm}>Agregar patito</button>
       {
         newDucklingForm ? (
-          <div className="new-duckling-form">
-            <div className="label-wrapper">
-              <label>Color</label>
-              <select
-                value={newDuckling?.color}
-                onChange={(e) => setNewDuckling(prev => ({ ...prev, color: e.target.value } as Duckling))}
-              >
-                <option value="">Selecciona un color</option>
-                {ducklingColors.map((el, i) => (
-                  <option key={i} value={el}>{el}</option>
-                ))}
-              </select>
-            </div>
-            <div className="label-wrapper">
-              <label>Tamaño</label>
-              <select
-                value={newDuckling?.size}
-                onChange={(e) => setNewDuckling(prev => ({ ...prev, size: e.target.value } as Duckling))}
-              >
-                <option value="">Selecciona un tamaño</option>
-                {ducklingSizes.map((el, i) => (
-                  <option key={i} value={el}>{el}</option>
-                ))}
-              </select>
-            </div>
-            <div className="label-wrapper">
-              <label>Cantidad</label>
-              <input
-                type="number" 
-                value={newDuckling?.quantity} 
-                onChange={(e) => setNewDuckling(prev => ({ ...prev, quantity: Number(e.target.value)} as Duckling))} 
-                placeholder="Cantidad de patitos" 
-              />
-            </div>
-            <div className="label-wrapper">
-              <label>Precio</label>
-              <input
-                type="number" 
-                value={newDuckling?.price} 
-                onChange={(e) => setNewDuckling(prev => ({ ...prev, price: Number(e.target.value) }))} 
-                placeholder="Precio" 
-              />
-            </div>
-            <button onClick={addDuckling}>Añadir</button>
-          </div>
+          <NewDucklingForm/>
         ) : (
           <></>
         )
